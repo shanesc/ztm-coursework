@@ -68,8 +68,8 @@ class App extends Component {
     this.setState({imageUrl: this.state.input});
     }
   
-  onRouteChange = () => {
-    this.setState({route: 'home'});
+  onRouteChange = (route) => {
+    this.setState({route: route});
   }
 
   render() {
@@ -78,9 +78,9 @@ class App extends Component {
         <Particles className='particles'
           params={particlesOptions} />
         { this.state.route === 'signin'
-          ? <Signin onRouteChange={this.onRouteChange}/>
+          ? <Signin onRouteChange={this.onRouteChange} />
           : <div>
-              <Navigation />
+              <Navigation onRouteChange={this.onRouteChange} />
               <Logo />
               <Rank />
               <ImageLinkForm 
