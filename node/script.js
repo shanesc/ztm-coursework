@@ -1,4 +1,7 @@
-const a = 5;
-const b = 5;
+const c = require('./script2.js');
 
-console.log(__dirname);
+const a = c.largeNumber;
+const b = 5;
+const d = c.smallNumber;
+
+console.log(b + d);
