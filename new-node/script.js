@@ -1,10 +1,12 @@
 const fs = require('fs');
 
 fs.readFile('./hello.txt', (err, data) => {
+  console.time('challenge');
   if (err) {
     console.log('error!');
   }
   console.log('1', data.toString());
+  console.timeEnd('challenge');
 });
 
 const file = fs.readFileSync('./hello.txt');
