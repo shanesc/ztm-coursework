@@ -6,7 +6,7 @@ class Signin extends Component {
     this.state = {
       signInEmail: '',
       signInPassword: ''
-    }
+    };
   }
 
   onEmailChange = (event) => {
@@ -49,7 +49,7 @@ class Signin extends Component {
                   type="email" 
                   name="email-address" 
                   id="email-address"
-                  onChange={this.onEmailChange} 
+                  onBlur={this.onEmailChange}
                 />
               </div>
               <div className="mv3">
@@ -59,7 +59,7 @@ class Signin extends Component {
                 type="password" 
                 name="password"  
                 id="password"
-                onChange={this.onPasswordChange} 
+                onBlur={this.onPasswordChange} 
               />
               </div>
             </fieldset>
@@ -79,7 +79,6 @@ class Signin extends Component {
       </article>
     );
   }
-  
 }
 
 export default Signin;

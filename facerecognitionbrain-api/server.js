@@ -47,17 +47,20 @@ if (req.body.email === database.users[0].email &&
 
 app.post('/register', (req, res) => {
   const { email, name, password } = req.body;
-  database.users.push({
-    id: '125',
-    name: name,
-    email: email,
-    password: password,
-    entries: 0,
-    joined: new Date(),
-  })
-  
-  res.json(database.users[database.users.length-1]);
-})
+  if (email !== '' || name !== '' || password !== '') {
+    database.users.push({
+      id: '125',
+      name: name,
+      email: email,
+      password: password,
+      entries: 0,
+      joined: new Date(),
+    });
+    res.json(database.users[database.users.length-1]);
+  } else {
+    res.status(400).json('invalid submission');
+  };
+});
 
 app.get('/profile/:id', (req, res) => {
   const { id } = req.params;
