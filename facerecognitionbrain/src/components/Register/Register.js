@@ -31,8 +31,9 @@ class Register extends Component {
       })
     })
     .then(response => response.json())
-    .then(data => {
-      if (data !== 'invalid submission') {
+    .then(user => {
+      if (user !== 'invalid submission') {
+        this.props.loadUser(user);
         this.props.onRouteChange('home');
       };
     })
