@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const bcrypt = require('bcrypt-nodejs');
 
 
 const app = express();
@@ -47,19 +48,22 @@ if (req.body.email === database.users[0].email &&
 
 app.post('/register', (req, res) => {
   const { email, name, password } = req.body;
-  if (email !== '' || name !== '' || password !== '') {
-    database.users.push({
-      id: '125',
-      name: name,
-      email: email,
-      password: password,
-      entries: 0,
-      joined: new Date()
-    });
-    res.json(database.users[database.users.length-1]);
-  } else {
-    res.status(400).json('invalid submission');
-  };
+  bcrypt.hash(password, null, null, function(err, hash) {
+    const passwordHash = hash;
+    if (email !== '' || name !== '' || passwordHash !== '') {
+      database.users.push({
+        id: '125',
+        name: name,
+        email: email,
+        password: passwordHash,
+        entries: 0,
+        joined: new Date()
+      });
+      res.json(database.users[database.users.length-1]);
+    } else {
+      res.status(400).json('invalid submission');
+    };
+  });
 });
 
 app.get('/profile/:id', (req, res) => {
