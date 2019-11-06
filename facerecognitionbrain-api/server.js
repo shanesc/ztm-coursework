@@ -2,6 +2,17 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt-nodejs');
+const knex = require('knex');
+
+const db = knex({
+  client: 'pg',
+  connection: {
+    host: '127.0.0.1',
+    user: 'Shane',
+    password: '',
+    database: 'smart-brain'
+  }
+});
 
 
 const app = express();
@@ -48,15 +59,17 @@ app.post('/register', (req, res) => {
   bcrypt.hash(password, null, null, function(err, hash) {
     const passwordHash = hash;
     if (email !== '' || name !== '' || passwordHash !== '') {
-      database.users.push({
-        id: '125',
-        name: name,
-        email: email,
-        password: passwordHash,
-        entries: 0,
-        joined: new Date()
-      });
-      res.json(database.users[database.users.length-1]);
+      db('users')
+        .returning('*')
+        .insert({
+          name: name,
+          email: email,
+          joined: new Date()
+        })
+        .then(user => {
+          res.json(user[0]);
+        })
+        .catch(err => res.status(400).json('invalid submission'))      
     } else {
       res.status(400).json('invalid submission');
     };
@@ -65,16 +78,14 @@ app.post('/register', (req, res) => {
 
 app.get('/profile/:id', (req, res) => {
   const { id } = req.params;
-  let found = false;
-  database.users.forEach(user => {
-    if (user.id === id) {
-      found = true;
-      return res.json(user);
-    }
-  })
-  if (!found) {
-    res.status(404).json('user not found');
-  };
+  db.select('*').from('users').where({id})
+    .then(user => {
+      if (user.length) {
+        res.json(user[0])
+      } else {
+        res.status(400).json('not found');
+      }
+    });
 });
 
 app.put('/image', (req, res) => {
